@@ -50,7 +50,9 @@ export async function createOrUpdateWord(wordData: WordData): Promise<string> {
       updatedAt: Timestamp.now(),
       createdAt: wordData.createdAt || Timestamp.now(),
       likesCount: wordData.likesCount || 0,
-      viewsCount: wordData.viewsCount || 0
+      viewsCount: wordData.viewsCount || 0,
+      // S'assurer que tags est un tableau vide et non undefined
+      tags: wordData.tags || []
     };
     
     // Créer ou mettre à jour le document
@@ -125,10 +127,20 @@ export async function deleteWord(wordId: string): Promise<void> {
 // Mettre à jour le statut d'un mot
 export async function updateWordStatus(wordId: string, status: 'active' | 'pending' | 'rejected'): Promise<void> {
   try {
+    // D'abord récupérer le document actuel pour préserver les champs existants
     const wordRef = doc(db, WORDS_COLLECTION, wordId);
+    const wordSnap = await getDoc(wordRef);
+    
+    if (!wordSnap.exists()) {
+      throw new Error(`Le mot avec l'ID ${wordId} n'existe pas`);
+    }
+    
+    // Mettre à jour uniquement le statut et le timestamp, en préservant les autres champs
     await updateDoc(wordRef, { 
       status, 
-      updatedAt: Timestamp.now() 
+      updatedAt: Timestamp.now(),
+      // S'assurer que le champ tags existe et est un tableau vide s'il est undefined
+      ...(wordSnap.data().tags === undefined && { tags: [] })
     });
   } catch (error) {
     console.error("Erreur lors de la mise à jour du statut du mot:", error);
