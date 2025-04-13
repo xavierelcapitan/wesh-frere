@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import Image from "next/image";
 
 const formSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -22,6 +23,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const currentYear = new Date().getFullYear();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,8 +53,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-50">
+    <div className="flex flex-col h-screen items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
+        <div className="flex justify-center -mt-16 mb-4">
+          <Image 
+            src="/images/wesh-frere-logo-admin.png" 
+            alt="Wesh Frère Logo" 
+            width={120} 
+            height={120} 
+            priority
+            className="rounded-full shadow-md bg-white p-2"
+          />
+        </div>
         <CardHeader>
           <CardTitle className="text-2xl text-center">Administration</CardTitle>
           <CardDescription className="text-center">
@@ -100,6 +112,11 @@ export default function LoginPage() {
           </Form>
         </CardContent>
       </Card>
+      
+      <div className="mt-8 text-gray-400 text-sm text-center">
+        <p>&copy; {currentYear} Wesh Frère. Tous droits réservés.</p>
+        <p className="mt-1">Version 1.0.0</p>
+      </div>
     </div>
   );
 } 

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { 
   LayoutDashboard, 
@@ -21,7 +22,10 @@ import {
   Flag,
   BookOpen,
   Home,
-  Database
+  Database,
+  Menu,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 interface SidebarItemProps {
@@ -29,18 +33,19 @@ interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   active?: boolean;
+  collapsed: boolean;
 }
 
-function SidebarItem({ href, icon, label, active }: SidebarItemProps) {
+function SidebarItem({ href, icon, label, active, collapsed }: SidebarItemProps) {
   return (
     <Link href={href} passHref>
       <div 
-        className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer hover:bg-gray-100 ${
+        className={`flex items-center ${collapsed ? "justify-center" : "space-x-3"} p-3 rounded-lg cursor-pointer hover:bg-gray-100 ${
           active ? "bg-gray-100 font-medium" : ""
         }`}
       >
         <div className="text-gray-500">{icon}</div>
-        <span>{label}</span>
+        {!collapsed && <span>{label}</span>}
       </div>
     </Link>
   );
@@ -49,6 +54,21 @@ function SidebarItem({ href, icon, label, active }: SidebarItemProps) {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth < 768) {
+        setCollapsed(true);
+      }
+    };
+    
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -112,11 +132,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className="w-64 border-r bg-white p-4">
-        <div className="mb-8 px-2">
-          <h1 className="text-xl font-bold">Admin Dashboard</h1>
+      <div 
+        className={`${
+          collapsed ? "w-16" : "w-64"
+        } transition-all duration-300 ease-in-out border-r bg-white p-4 relative`}
+      >
+        <div className={`${collapsed ? "justify-center" : "px-2"} mb-8 flex items-center`}>
+          {!collapsed && <h1 className="text-xl font-bold">Admin</h1>}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={`ml-auto ${collapsed ? "mx-auto" : ""}`}
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </Button>
         </div>
+        
         <nav className="space-y-1">
           {items.map((item) => (
             <SidebarItem 
@@ -125,23 +157,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               icon={item.icon} 
               label={item.label} 
               active={item.active} 
+              collapsed={collapsed}
             />
           ))}
         </nav>
-        <div className="absolute bottom-4 w-56">
+        
+        <div className={`absolute bottom-4 ${collapsed ? "w-12" : "w-56"}`}>
           <Button 
             variant="outline" 
-            className="w-full justify-start space-x-2" 
+            className={`w-full ${collapsed ? "justify-center p-2" : "justify-start space-x-2"}`} 
             onClick={handleLogout}
           >
             <LogOut size={18} />
-            <span>Déconnexion</span>
+            {!collapsed && <span>Déconnexion</span>}
           </Button>
         </div>
       </div>
 
-      {/* Main content */}
       <div className="flex-1 overflow-auto">
+        {isMobile && (
+          <div className="p-4 border-b bg-white">
+            <Button variant="outline" size="icon" onClick={() => setCollapsed(!collapsed)}>
+              <Menu size={20} />
+            </Button>
+          </div>
+        )}
         {children}
       </div>
     </div>
