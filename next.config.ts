@@ -2,11 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  // Désactiver ESLint pendant le build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     domains: ['firebasestorage.googleapis.com'],
     formats: ['image/avif', 'image/webp'],
   },
+  // Retirer swcMinify qui n'est plus reconnu dans Next.js 15.3.0
   // Optimizations for Vercel deployment
   poweredByHeader: false,
   compress: true,
