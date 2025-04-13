@@ -1,6 +1,30 @@
 "use client"
 
-import { Word, WordOfTheDay } from "@/types"
+// Définition de l'interface Word ici pour éviter les problèmes d'import
+interface Word {
+  id: string;
+  text: string;
+  definition: string;
+  exemple?: string;
+  origine?: string;
+  status?: string;
+  likesCount?: number;
+  viewsCount?: number;
+}
+
+// Définition locale de l'interface 
+interface WordOfTheDay {
+  id: string;
+  word: Word;
+  definition?: string;
+  example?: string;
+  date: string;
+  viewCount?: number;
+  createdAt?: any;
+  updatedAt?: any;
+  status?: 'active' | 'inactive';
+}
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar, Eye, RotateCw } from "lucide-react"
