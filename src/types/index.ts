@@ -80,4 +80,16 @@ export type SuggestionStats = {
   approved: number;
   rejected: number;
   approvalRate: number;
-}; 
+};
+
+export interface WordOfTheDay {
+  id: string;
+  word: string;
+  definition: string;
+  example?: string;
+  date?: Date | string; // Date à laquelle le mot a été sélectionné
+  createdAt?: any; // Timestamp de création
+  updatedAt?: any; // Timestamp de mise à jour
+  status?: 'active' | 'inactive';
+  // Ajoutez d'autres propriétés selon les besoins de votre application
+} 
