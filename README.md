@@ -1,100 +1,121 @@
-# Dashboard Administratif
+# Admin Dashboard - Wesh Frère
 
-Ce projet est un tableau de bord administratif pour gérer une application mobile.
+Tableau de bord administratif pour l'application Wesh Frère.
 
-## Technologies utilisées
+## Technologies Utilisées
 
-- Next.js 14+ (App Router)
-- Firebase Authentication
-- Firebase Firestore
-- Tailwind CSS
-- ShadCN UI
-- React Hook Form + Zod
-- Recharts pour les visualisations
-
-## Prérequis
-
-- Node.js 18+ 
-- pnpm
-
-## Installation
-
-1. Clonez le dépôt
-2. Installez les dépendances avec pnpm :
-
-```bash
-pnpm install
-```
-
-3. Configurez vos variables d'environnement Firebase dans le fichier `.env.local` :
-
-```
-NEXT_PUBLIC_FIREBASE_API_KEY=votre_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=votre_auth_domain
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=votre_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=votre_storage_bucket
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=votre_messaging_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=votre_app_id
-```
-
-## Utilisation
-
-Pour démarrer le serveur de développement :
-
-```bash
-pnpm dev
-```
-
-L'application sera disponible sur [http://localhost:3000](http://localhost:3000).
+- Next.js 15
+- React 19
+- Firebase (Authentication, Firestore)
+- TailwindCSS
+- TypeScript
 
 ## Fonctionnalités
 
-- Authentification sécurisée avec Firebase
-- Tableau de bord avec statistiques
-- Visualisation de données avec graphiques
 - Gestion des utilisateurs
-- Paramètres du compte et préférences
+- Modération des commentaires
+- Gestion des suggestions
+- Administration des mots
+- Statistiques et analytics
 
-## Structure du projet
+## Démarrage Rapide
 
-- `/src/app` - Routes de l'application (App Router)
-- `/src/components` - Composants réutilisables
-- `/src/lib` - Utilitaires et configuration
-- `/public` - Ressources statiques
+### Prérequis
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+- Node.js (version 18.x ou supérieure)
+- pnpm (version 8.x ou supérieure)
 
-## Getting Started
+### Installation
 
-First, run the development server:
+1. Clonez le dépôt
+   ```bash
+   git clone https://github.com/xavierelcapitan/wesh-frere.git
+   cd wesh-frere/admin-dashboard
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2. Installez les dépendances
+   ```bash
+   pnpm install
+   ```
+
+3. Configurez les variables d'environnement
+   Créez un fichier `.env.local` à la racine du projet avec les variables suivantes :
+   ```
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id
+   ```
+
+4. Lancez le serveur de développement
+   ```bash
+   pnpm dev
+   ```
+
+5. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
+
+## Déploiement sur Vercel
+
+### Méthode 1: Via l'Interface Vercel
+
+1. Connectez-vous à [Vercel](https://vercel.com/)
+2. Cliquez sur "New Project" et importez votre dépôt GitHub
+3. Sélectionnez le répertoire `admin-dashboard`
+4. Configurez les variables d'environnement dans l'interface Vercel
+5. Cliquez sur "Deploy"
+
+### Méthode 2: Via Vercel CLI
+
+1. Installez Vercel CLI
+   ```bash
+   pnpm install -g vercel
+   ```
+
+2. Connectez-vous à votre compte Vercel
+   ```bash
+   vercel login
+   ```
+
+3. Déployez l'application
+   ```bash
+   cd admin-dashboard
+   vercel
+   ```
+
+4. Pour un déploiement en production
+   ```bash
+   vercel --prod
+   ```
+
+### Configuration de Firebase pour la Production
+
+1. Assurez-vous d'avoir configuré les règles de sécurité Firestore appropriées
+2. Activez uniquement les fournisseurs d'authentification nécessaires
+3. Configurez les domaines autorisés dans Firebase Authentication
+
+## Structure du Projet
+
+```
+admin-dashboard/
+├── public/         # Fichiers statiques
+├── src/
+│   ├── app/        # Pages et routes Next.js
+│   ├── components/ # Composants React réutilisables
+│   ├── lib/        # Bibliothèques et configurations
+│   └── services/   # Services Firebase et API
+├── .env.local      # Variables d'environnement locales
+└── vercel.json     # Configuration Vercel
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Sécurité
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Assurez-vous que votre fichier `.env.local` n'est pas commité dans le dépôt
+- Utilisez des règles Firestore restrictives en production
+- Limitez l'accès administrateur aux comptes vérifiés
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Licence
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ce projet est sous licence privée et n'est pas destiné à être distribué ou utilisé sans autorisation.
