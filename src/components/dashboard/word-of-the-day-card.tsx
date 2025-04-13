@@ -1,14 +1,27 @@
 "use client"
 
-import { Word, WordOfTheDay } from "@/types"
+import { Word } from "@/types"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar, Eye, RotateCw } from "lucide-react"
 import { useState } from "react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
+// Définir l'interface localement au lieu de l'importer
+interface WordOfTheDay {
+  id: string;
+  word: Word; // Référence à l'objet Word complet au lieu d'une chaîne
+  definition?: string;
+  example?: string;
+  date: string;
+  viewCount?: number;
+  createdAt?: any;
+  updatedAt?: any;
+  status?: 'active' | 'inactive';
+}
+
 interface WordOfTheDayCardProps {
-  wordOfTheDay: WordOfTheDay & { word: Word }
+  wordOfTheDay: WordOfTheDay
   onRefresh?: () => Promise<void>
 }
 
@@ -52,11 +65,11 @@ export function WordOfTheDayCard({ wordOfTheDay, onRefresh }: WordOfTheDayCardPr
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <h3 className="text-2xl font-bold">{wordOfTheDay.word.word}</h3>
+          <h3 className="text-2xl font-bold">{wordOfTheDay.word.text}</h3>
           
-          {wordOfTheDay.word.origin && (
+          {wordOfTheDay.word.origine && (
             <div className="text-sm text-gray-500">
-              <span className="font-medium">Origine:</span> {wordOfTheDay.word.origin}
+              <span className="font-medium">Origine:</span> {wordOfTheDay.word.origine}
             </div>
           )}
           
@@ -66,7 +79,7 @@ export function WordOfTheDayCard({ wordOfTheDay, onRefresh }: WordOfTheDayCardPr
           
           <div className="flex items-center mt-4 text-gray-500 text-sm">
             <Eye className="h-4 w-4 mr-1" />
-            <span>{wordOfTheDay.viewCount} vues</span>
+            <span>{wordOfTheDay.viewCount || 0} vues</span>
           </div>
         </div>
       </CardContent>
