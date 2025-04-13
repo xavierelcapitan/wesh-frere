@@ -16,7 +16,12 @@ import {
   Lightbulb,
   Smartphone,
   ShieldAlert,
-  MessageCircle
+  MessageCircle,
+  CalendarDays,
+  Flag,
+  BookOpen,
+  Home,
+  Database
 } from "lucide-react";
 
 interface SidebarItemProps {
@@ -54,6 +59,57 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   };
 
+  const items = [
+    {
+      href: "/dashboard",
+      icon: <Home size={20} />,
+      label: "Accueil",
+      active: pathname === "/dashboard",
+    },
+    {
+      href: "/dashboard/users",
+      icon: <Users size={20} />,
+      label: "Utilisateurs",
+      active: pathname === "/dashboard/users",
+    },
+    {
+      href: "/dashboard/comments",
+      icon: <MessageCircle size={20} />,
+      label: "Commentaires",
+      active: pathname === "/dashboard/comments",
+    },
+    {
+      href: "/dashboard/words",
+      icon: <BookOpen size={20} />,
+      label: "Mots",
+      active: pathname === "/dashboard/words",
+    },
+    {
+      href: "/dashboard/suggestions",
+      icon: <Lightbulb size={20} />,
+      label: "Suggestions",
+      active: pathname === "/dashboard/suggestions",
+    },
+    {
+      href: "/dashboard/mot-du-jour",
+      icon: <CalendarDays size={20} />,
+      label: "Mot du jour",
+      active: pathname === "/dashboard/mot-du-jour",
+    },
+    {
+      href: "/dashboard/moderation",
+      icon: <Flag size={20} />,
+      label: "Modération",
+      active: pathname === "/dashboard/moderation",
+    },
+    {
+      href: "/dashboard/settings",
+      icon: <Settings size={20} />,
+      label: "Paramètres",
+      active: pathname === "/dashboard/settings",
+    },
+  ];
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
@@ -62,60 +118,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <h1 className="text-xl font-bold">Admin Dashboard</h1>
         </div>
         <nav className="space-y-1">
-          <SidebarItem 
-            href="/dashboard" 
-            icon={<LayoutDashboard size={20} />} 
-            label="Tableau de bord" 
-            active={pathname === "/dashboard"} 
-          />
-          <SidebarItem 
-            href="/dashboard/stats" 
-            icon={<BarChart size={20} />} 
-            label="Statistiques" 
-            active={pathname === "/dashboard/stats"} 
-          />
-          <SidebarItem 
-            href="/dashboard/words" 
-            icon={<BookText size={20} />} 
-            label="Mots" 
-            active={pathname === "/dashboard/words"} 
-          />
-          <SidebarItem 
-            href="/dashboard/suggestions" 
-            icon={<Lightbulb size={20} />} 
-            label="Suggestions" 
-            active={pathname === "/dashboard/suggestions"} 
-          />
-          <SidebarItem 
-            href="/dashboard/comments" 
-            icon={<MessageCircle size={20} />} 
-            label="Commentaires" 
-            active={pathname === "/dashboard/comments"} 
-          />
-          <SidebarItem 
-            href="/dashboard/moderation" 
-            icon={<ShieldAlert size={20} />} 
-            label="Modération" 
-            active={pathname === "/dashboard/moderation"} 
-          />
-          <SidebarItem 
-            href="/dashboard/users" 
-            icon={<Users size={20} />} 
-            label="Utilisateurs" 
-            active={pathname === "/dashboard/users"} 
-          />
-          <SidebarItem 
-            href="/dashboard/mobile" 
-            icon={<Smartphone size={20} />} 
-            label="Version Mobile" 
-            active={pathname === "/dashboard/mobile"} 
-          />
-          <SidebarItem 
-            href="/dashboard/settings" 
-            icon={<Settings size={20} />} 
-            label="Paramètres" 
-            active={pathname === "/dashboard/settings"} 
-          />
+          {items.map((item) => (
+            <SidebarItem 
+              key={item.href}
+              href={item.href} 
+              icon={item.icon} 
+              label={item.label} 
+              active={item.active} 
+            />
+          ))}
         </nav>
         <div className="absolute bottom-4 w-56">
           <Button 
