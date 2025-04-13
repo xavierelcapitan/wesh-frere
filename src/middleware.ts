@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Tableau des chemins publics qui ne nécessitent pas d'authentification
-const publicPaths = ['/login', '/_next', '/api/auth', '/images']
+const publicPaths = ['/login', '/_next', '/api/auth', '/images', '/image']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -38,8 +38,9 @@ export const config = {
      * 1. /api/auth (NextAuth.js)
      * 2. /_next (ressources Next.js)
      * 3. /images (Images locales)
-     * 4. /login (Page de connexion)
+     * 4. /image (Images du logo)
+     * 5. /login (Page de connexion)
      */
-    '/((?!api/auth|_next|images|login).*)',
+    '/((?!api/auth|_next|images|image|login).*)',
   ],
 }
