@@ -77,7 +77,7 @@ export default function UsersPage() {
     ville: "",
     email: "",
     age: 0,
-    status: "active" as "active" | "inactive"
+    status: "active" as "active" | "inactive" | "banned" | "visitor"
   });
 
   // Charger les utilisateurs au chargement de la page
@@ -178,10 +178,18 @@ export default function UsersPage() {
 
   // Obtenir le badge de statut
   const getStatusBadge = (status?: string) => {
-    if (status === "active") {
-      return <Badge className="bg-green-100 text-green-800">Actif</Badge>;
+    switch(status) {
+      case "active":
+        return <Badge className="bg-green-100 text-green-800">Actif</Badge>;
+      case "visitor":
+        return <Badge className="bg-blue-100 text-blue-800">Visiteur</Badge>;
+      case "banned":
+        return <Badge className="bg-red-100 text-red-800">Banni</Badge>;
+      case "inactive":
+        return <Badge className="bg-gray-100 text-gray-800">Inactif</Badge>;
+      default:
+        return <Badge className="bg-gray-100 text-gray-800">Inconnu</Badge>;
     }
-    return <Badge className="bg-red-100 text-red-800">Bloqué</Badge>;
   };
 
   // Ouvrir la modale de détails
@@ -248,7 +256,7 @@ export default function UsersPage() {
   };
 
   // Gérer les changements de sélecteur (comme le statut)
-  const handleSelectChange = (name: string, value: "active" | "inactive") => {
+  const handleSelectChange = (name: string, value: "active" | "inactive" | "banned" | "visitor") => {
     setFormData({
       ...formData,
       [name]: value
@@ -294,7 +302,7 @@ export default function UsersPage() {
   };
 
   // Mettre à jour le statut d'un utilisateur
-  const handleStatusChange = async (userId: string, status: 'active' | 'inactive') => {
+  const handleStatusChange = async (userId: string, status: 'active' | 'inactive' | 'banned' | 'visitor') => {
     if (!userId) return;
     
     try {
@@ -311,9 +319,17 @@ export default function UsersPage() {
         setSelectedUser({ ...selectedUser, status });
       }
       
+      let statusLabel = "";
+      switch(status) {
+        case "active": statusLabel = "actif"; break;
+        case "inactive": statusLabel = "inactif"; break;
+        case "banned": statusLabel = "banni"; break;
+        case "visitor": statusLabel = "visiteur"; break;
+      }
+      
       toast({
         title: "Statut mis à jour",
-        description: `L'utilisateur est maintenant ${status === 'active' ? 'actif' : 'bloqué'}.`,
+        description: `L'utilisateur est maintenant ${statusLabel}.`,
       });
     } catch (error) {
       console.error("Erreur lors de la mise à jour du statut:", error);
@@ -616,14 +632,16 @@ export default function UsersPage() {
                   </Label>
                   <Select
                     value={formData.status}
-                    onValueChange={(value: "active" | "inactive") => handleSelectChange("status", value)}
+                    onValueChange={(value: "active" | "inactive" | "banned" | "visitor") => handleSelectChange("status", value)}
                   >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Sélectionner un statut" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="active">Actif</SelectItem>
-                      <SelectItem value="inactive">Bloqué</SelectItem>
+                      <SelectItem value="visitor">Visiteur</SelectItem>
+                      <SelectItem value="inactive">Inactif</SelectItem>
+                      <SelectItem value="banned">Banni</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

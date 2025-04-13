@@ -25,10 +25,12 @@ export interface UserData {
   email: string;
   createdAt?: string | Timestamp;
   updatedAt?: string | Timestamp;
-  status?: 'active' | 'inactive';
+  status?: 'active' | 'inactive' | 'banned' | 'visitor';
   role?: 'admin' | 'user' | 'editor';
   favoris?: string[]; // IDs des mots favoris
   lastLogin?: string | Timestamp;
+  warnings?: number; // Nombre d'avertissements
+  banReason?: string; // Raison du bannissement
 }
 
 // Collection Firestore
@@ -119,12 +121,14 @@ export async function deleteUser(userId: string): Promise<void> {
 }
 
 // Mettre à jour le statut d'un utilisateur
-export async function updateUserStatus(userId: string, status: 'active' | 'inactive'): Promise<void> {
+export async function updateUserStatus(userId: string, status: 'active' | 'inactive' | 'banned' | 'visitor'): Promise<void> {
   try {
     const userRef = doc(db, USERS_COLLECTION, userId);
     await updateDoc(userRef, { 
       status, 
-      updatedAt: Timestamp.now() 
+      updatedAt: Timestamp.now(),
+      // Si on débloque un utilisateur banni, on réinitialise la raison du bannissement
+      ...(status !== 'banned' ? { banReason: "" } : {})
     });
   } catch (error) {
     console.error("Erreur lors de la mise à jour du statut de l'utilisateur:", error);
@@ -190,6 +194,122 @@ export async function updateLastLogin(userId: string): Promise<void> {
     });
   } catch (error) {
     console.error("Erreur lors de la mise à jour de la dernière connexion:", error);
+    throw error;
+  }
+}
+
+// Ajouter un avertissement à un utilisateur
+export async function addWarningToUser(userId: string, reason?: string): Promise<number> {
+  try {
+    const userRef = doc(db, USERS_COLLECTION, userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (!userDoc.exists()) {
+      throw new Error("Utilisateur non trouvé");
+    }
+    
+    const userData = userDoc.data();
+    const currentWarnings = userData.warnings || 0;
+    const newWarnings = currentWarnings + 1;
+    
+    // Si l'utilisateur a 2 avertissements ou plus, on le bannit
+    if (newWarnings >= 2) {
+      await updateDoc(userRef, {
+        warnings: newWarnings,
+        status: 'banned',
+        banReason: reason || "Multiple avertissements",
+        updatedAt: Timestamp.now()
+      });
+    } else {
+      await updateDoc(userRef, {
+        warnings: newWarnings,
+        updatedAt: Timestamp.now()
+      });
+    }
+    
+    return newWarnings;
+  } catch (error) {
+    console.error("Erreur lors de l'ajout d'un avertissement à l'utilisateur:", error);
+    throw error;
+  }
+}
+
+// Bannir un utilisateur
+export async function banUser(userId: string, reason?: string): Promise<void> {
+  try {
+    const userRef = doc(db, USERS_COLLECTION, userId);
+    await updateDoc(userRef, {
+      status: 'banned',
+      banReason: reason || "Violation des règles de la communauté",
+      updatedAt: Timestamp.now()
+    });
+  } catch (error) {
+    console.error("Erreur lors du bannissement de l'utilisateur:", error);
+    throw error;
+  }
+}
+
+// Débannir un utilisateur
+export async function unbanUser(userId: string): Promise<void> {
+  try {
+    const userRef = doc(db, USERS_COLLECTION, userId);
+    await updateDoc(userRef, {
+      status: 'active',
+      banReason: "",
+      updatedAt: Timestamp.now()
+    });
+  } catch (error) {
+    console.error("Erreur lors de la levée du bannissement de l'utilisateur:", error);
+    throw error;
+  }
+}
+
+// Réinitialiser les avertissements d'un utilisateur
+export async function resetUserWarnings(userId: string): Promise<void> {
+  try {
+    const userRef = doc(db, USERS_COLLECTION, userId);
+    await updateDoc(userRef, {
+      warnings: 0,
+      updatedAt: Timestamp.now()
+    });
+  } catch (error) {
+    console.error("Erreur lors de la réinitialisation des avertissements de l'utilisateur:", error);
+    throw error;
+  }
+}
+
+// Vérifier si un utilisateur est banni (par email ou pseudo)
+export async function checkUserBanned(email: string, pseudo: string): Promise<{ banned: boolean, reason?: string }> {
+  try {
+    // Vérifier par email
+    const emailQuery = query(
+      collection(db, USERS_COLLECTION), 
+      where("email", "==", email),
+      where("status", "==", "banned")
+    );
+    const emailResults = await getDocs(emailQuery);
+    
+    if (!emailResults.empty) {
+      const userData = emailResults.docs[0].data();
+      return { banned: true, reason: userData.banReason || "Compte banni" };
+    }
+    
+    // Vérifier par pseudo
+    const pseudoQuery = query(
+      collection(db, USERS_COLLECTION), 
+      where("pseudo", "==", pseudo),
+      where("status", "==", "banned")
+    );
+    const pseudoResults = await getDocs(pseudoQuery);
+    
+    if (!pseudoResults.empty) {
+      const userData = pseudoResults.docs[0].data();
+      return { banned: true, reason: userData.banReason || "Compte banni" };
+    }
+    
+    return { banned: false };
+  } catch (error) {
+    console.error("Erreur lors de la vérification du statut de bannissement:", error);
     throw error;
   }
 } 
