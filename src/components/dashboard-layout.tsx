@@ -15,7 +15,8 @@ import {
   BookText,
   Lightbulb,
   Smartphone,
-  ShieldAlert
+  ShieldAlert,
+  MessageCircle
 } from "lucide-react";
 
 interface SidebarItemProps {
@@ -84,6 +85,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             icon={<Lightbulb size={20} />} 
             label="Suggestions" 
             active={pathname === "/dashboard/suggestions"} 
+          />
+          <SidebarItem 
+            href="/dashboard/comments" 
+            icon={<MessageCircle size={20} />} 
+            label="Commentaires" 
+            active={pathname === "/dashboard/comments"} 
           />
           <SidebarItem 
             href="/dashboard/moderation" 
