@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from "next/image";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -116,6 +117,9 @@ export default function LoginPage() {
       <div className="mt-8 text-gray-400 text-sm text-center">
         <p>&copy; {currentYear} Wesh Frère. Tous droits réservés.</p>
         <p className="mt-1">Version 1.0.0</p>
+        <p className="mt-2">
+          Made with ❤️ by <Link href="https://www.pimpmycode.fr" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors">Pimp My Code</Link>
+        </p>
       </div>
     </div>
   );
