@@ -1,3 +1,67 @@
+# Dashboard Administratif
+
+Ce projet est un tableau de bord administratif pour gérer une application mobile.
+
+## Technologies utilisées
+
+- Next.js 14+ (App Router)
+- Firebase Authentication
+- Firebase Firestore
+- Tailwind CSS
+- ShadCN UI
+- React Hook Form + Zod
+- Recharts pour les visualisations
+
+## Prérequis
+
+- Node.js 18+ 
+- pnpm
+
+## Installation
+
+1. Clonez le dépôt
+2. Installez les dépendances avec pnpm :
+
+```bash
+pnpm install
+```
+
+3. Configurez vos variables d'environnement Firebase dans le fichier `.env.local` :
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=votre_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=votre_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=votre_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=votre_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=votre_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=votre_app_id
+```
+
+## Utilisation
+
+Pour démarrer le serveur de développement :
+
+```bash
+pnpm dev
+```
+
+L'application sera disponible sur [http://localhost:3000](http://localhost:3000).
+
+## Fonctionnalités
+
+- Authentification sécurisée avec Firebase
+- Tableau de bord avec statistiques
+- Visualisation de données avec graphiques
+- Gestion des utilisateurs
+- Paramètres du compte et préférences
+
+## Structure du projet
+
+- `/src/app` - Routes de l'application (App Router)
+- `/src/components` - Composants réutilisables
+- `/src/lib` - Utilitaires et configuration
+- `/public` - Ressources statiques
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
