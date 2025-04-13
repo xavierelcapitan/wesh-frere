@@ -84,12 +84,12 @@ export type SuggestionStats = {
 
 export interface WordOfTheDay {
   id: string;
-  word: string;
-  definition: string;
+  word: Word;
+  definition?: string;
   example?: string;
-  date?: Date | string; // Date à laquelle le mot a été sélectionné
-  createdAt?: any; // Timestamp de création
-  updatedAt?: any; // Timestamp de mise à jour
+  date: string;
+  viewCount?: number;
+  createdAt?: any;
+  updatedAt?: any;
   status?: 'active' | 'inactive';
-  // Ajoutez d'autres propriétés selon les besoins de votre application
 } 

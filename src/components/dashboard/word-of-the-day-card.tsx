@@ -1,24 +1,11 @@
 "use client"
 
-import { Word } from "@/types"
+import { Word, WordOfTheDay } from "@/types"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar, Eye, RotateCw } from "lucide-react"
 import { useState } from "react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
-
-// Définir l'interface localement au lieu de l'importer
-interface WordOfTheDay {
-  id: string;
-  word: Word; // Référence à l'objet Word complet au lieu d'une chaîne
-  definition?: string;
-  example?: string;
-  date: string;
-  viewCount?: number;
-  createdAt?: any;
-  updatedAt?: any;
-  status?: 'active' | 'inactive';
-}
 
 interface WordOfTheDayCardProps {
   wordOfTheDay: WordOfTheDay
