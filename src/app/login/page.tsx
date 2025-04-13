@@ -58,7 +58,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <div className="flex justify-center -mt-16 mb-4">
           <Image 
-            src="/images/wesh-frere-logo-admin.png" 
+            src="/image/logocomplet.png" 
             alt="Wesh Frère Logo" 
             width={120} 
             height={120} 
